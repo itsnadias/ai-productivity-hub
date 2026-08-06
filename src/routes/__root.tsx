@@ -11,6 +11,10 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SessionProvider } from "@/components/session-provider";
+import { Toaster } from "@/components/ui/sonner";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 function NotFoundComponent() {
   return (
@@ -77,11 +81,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "AI Workplace Productivity Assistant" },
+      { name: "description", content: "Generate professional emails, meeting summaries and prioritized task plans with AI. No signup, no storage." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "AI Workplace Productivity Assistant" },
+      { property: "og:description", content: "AI tools for emails, meeting notes and task planning — free to use, session-only." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
@@ -119,8 +123,26 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <SessionProvider>
+        <SidebarProvider>
+          <div className="bg-app-gradient flex min-h-screen w-full">
+            <AppSidebar />
+            <SidebarInset className="bg-transparent">
+              <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b border-border/70 bg-background/70 px-3 backdrop-blur sm:px-6">
+                <SidebarTrigger />
+                <span className="truncate text-sm font-medium text-muted-foreground">
+                  AI Workplace Productivity Assistant
+                </span>
+              </header>
+              <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
+                {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+                <Outlet />
+              </main>
+            </SidebarInset>
+          </div>
+        </SidebarProvider>
+        <Toaster />
+      </SessionProvider>
     </QueryClientProvider>
   );
 }

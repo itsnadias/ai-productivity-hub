@@ -14,7 +14,7 @@ export function buildPrompt(
 ): { system: string; prompt: string } {
   switch (tool) {
     case "email": {
-      const tone = input.tone || "Formal";
+      const tone = input["tone"] || "Formal";
       return {
         system: `You are an expert workplace communication assistant who writes clear, effective business emails.${SHARED_RULES}
 Always return: a "Subject:" line, then the email body with a greeting, 1-3 short paragraphs, a clear call to action, and a sign-off.
@@ -23,11 +23,11 @@ Tone guidance:
 - Friendly: warm, conversational, positive, still professional.
 - Persuasive: benefit-led, confident, with a specific ask and a reason to act.`,
         prompt: `Write a ${tone.toLowerCase()} email.
-Purpose: ${input.purpose || "(not specified)"}
-Recipient: ${input.recipient || "(unspecified recipient)"}
-Sender: ${input.sender || "(unspecified sender)"}
+Purpose: ${input["purpose"] || "(not specified)"}
+Recipient: ${input["recipient"] || "(unspecified recipient)"}
+Sender: ${input["sender"] || "(unspecified sender)"}
 Key details to include:
-${input.details || "(none provided)"}`,
+${input["details"] || "(none provided)"}`,
       };
     }
     case "meeting":
@@ -40,9 +40,9 @@ Always structure the output with these headings, in this order:
 ## Action Items  (one bullet per item: task - owner - deadline; write "Unassigned" or "No deadline" when the notes do not say)
 ## Open Questions / Follow-ups  (bullets; omit the section if there are none)`,
         prompt: `Summarize these meeting notes.
-Meeting title: ${input.title || "(untitled meeting)"}
+Meeting title: ${input["title"] || "(untitled meeting)"}
 Notes:
-${input.notes || "(none provided)"}`,
+${input["notes"] || "(none provided)"}`,
       };
     case "planner":
       return {
@@ -52,10 +52,10 @@ Always structure the output with these headings:
 ## Schedule  (time blocks with start-end times, including focus blocks, breaks and buffer time)
 ## Productivity Tips  (3-5 short, specific tips tied to this plan)
 Respect the stated working hours and keep the plan achievable rather than overloaded.`,
-        prompt: `Build a ${input.horizon === "weekly" ? "weekly" : "daily"} plan.
-Working hours: ${input.hours || "09:00-17:00"}
+        prompt: `Build a ${input["horizon"] === "weekly" ? "weekly" : "daily"} plan.
+Working hours: ${input["hours"] || "09:00-17:00"}
 Tasks (one per line, may include deadlines or notes):
-${input.tasks || "(none provided)"}`,
+${input["tasks"] || "(none provided)"}`,
       };
   }
 }
